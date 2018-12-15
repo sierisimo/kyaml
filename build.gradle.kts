@@ -44,7 +44,6 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
 
-//val test by tasks.getting(Test::class) {
 tasks.withType<Test> {
     useJUnitPlatform()
 

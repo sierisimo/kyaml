@@ -4,41 +4,15 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 @DisplayName("Main set of tests")
-class KYAMLTest {
+internal class KYAMLTest {
     @Test
     fun `empty YAML is NOT a valid YAML`() {
         assertFailsWith(KYAMLException::class) {
             val content = ""
-            KYAML.of(content)
-        }
-    }
-
-    @Test
-    fun `bad start is NOT a valid YAML`() {
-        assertFailsWith(KYAMLException::class) {
-            val content = """-"""
-            KYAML.of(content)
-        }
-
-        assertFailsWith(KYAMLException::class) {
-            val content = """--"""
-            KYAML.of(content)
-        }
-
-        assertFailsWith(KYAMLException::class) {
-            val content = """ ---"""
-            KYAML.of(content)
-        }
-
-        assertFailsWith(KYAMLException::class) {
-            val content = """#---"""
-            KYAML.of(content)
-        }
-
-        assertFailsWith(KYAMLException::class) {
-            val content = """---~"""
             KYAML.of(content)
         }
     }
@@ -67,96 +41,13 @@ class KYAMLTest {
     }
 
     @Test
-    fun `no invalid elements after start in same line`() {
-        assertFailsWith(KYAMLException::class) {
-            val content = """--- $"""
-            KYAML.of(content)
-        }
-
-        assertFailsWith(KYAMLException::class) {
-            val content = """--- """"
-            KYAML.of(content)
-        }
-
-        assertFailsWith(KYAMLException::class) {
-            val content = """--- 1"""
-            KYAML.of(content)
-        }
-
-        assertFailsWith(KYAMLException::class) {
-            val content = """--- |"""
-            KYAML.of(content)
-        }
-    }
-
-    @Test
-    fun `comments are valid after start`() {
-        var content = """--- #"""
-        var result = KYAML.of(content)
-
-        with(result) {
-            assertEquals(keys.size, emptySet<String>().size)
-            assertEquals(values.size, emptyList<String>().size)
-        }
-
-        content = """---             #"""
-        result = KYAML.of(content)
-
-        with(result) {
-            assertEquals(keys.size, emptySet<String>().size)
-            assertEquals(values.size, emptyList<String>().size)
-        }
-
-        content = """---     #0123456789---...,,,,,"""
-        result = KYAML.of(content)
-
-        with(result) {
-            assertEquals(keys.size, emptySet<String>().size)
-            assertEquals(values.size, emptyList<String>().size)
-        }
-    }
-
-    @Test
-    fun `check an string can be passed with only --- ~`() {
-        val content = """--- ~"""
-        val result = KYAML.of(content)
-
-        with(result) {
-            assertEquals(keys.size, emptySet<String>().size)
-            assertEquals(values.size, emptyList<String>().size)
-        }
-    }
-
-    @Test
-    fun `validate --- false is valid YAML`() {
-        val content = """--- false"""
-        val result = KYAML.of(content)
-
-        with(result) {
-            assertEquals(keys.size, emptySet<String>().size)
-            assertEquals(values.size, emptyList<String>().size)
-        }
-    }
-
-    @Test
-    fun `validate --- … is valid YAML`() {
-        val content = """--- ..."""
-        val result = KYAML.of(content)
-
-        with(result) {
-            assertEquals(keys.size, emptySet<String>().size)
-            assertEquals(values.size, emptyList<String>().size)
-        }
-    }
-
-    @Test
     fun `comments only YAML is NOT a valid YAML`() {
         assertFailsWith(KYAMLException::class) {
             val content = "#"
             KYAML.of(content)
         }
 
-        assertFailsWith(KYAMLException::class){
+        assertFailsWith(KYAMLException::class) {
             val content = """#
                 |#
                 |#
@@ -165,5 +56,58 @@ class KYAMLTest {
         }
     }
 
+    @Test
+    fun `Key and Value should exist with small YAML, it can be an int`() {
+        val content = """---
+            |foo: 1
+        """.trimMargin()
+        val result = KYAML.of(content)
 
+        assertEquals(1, result["foo"]?.toInt())
+    }
+
+    @Test
+    fun `Key and Value should exist with small YAML, it can be a string`() {
+        val content = """---
+            |foo: 1
+        """.trimMargin()
+        val result = KYAML.of(content)
+
+        assertEquals("1", result["foo"].toString())
+    }
+
+    @Test
+    fun `Key and Value should exist with small YAML, it can be a boolean`() {
+        var content = """---
+            |foo: true
+        """.trimMargin()
+        var result = KYAML.of(content)
+        assertEquals(true, result["foo"]?.toBoolean())
+
+        content = """---
+            |foo: false
+        """.trimMargin()
+        result = KYAML.of(content)
+        assertEquals(false, result["foo"]?.toBoolean())
+    }
+
+    @Test
+    fun `Key and Value should exist with small YAML, it can be a null`() {
+        val content = """---
+            |foo: null
+        """.trimMargin()
+        val result = KYAML.of(content)
+
+        assertNull(result["foo"])
+    }
+
+    @Test
+    fun `Empty value should return 'Empty' object`() {
+        val content = """---
+            |foo
+        """.trimMargin()
+        val result = KYAML.of(content)
+
+        assertTrue(result["foo"] is Empty)
+    }
 }
