@@ -25,5 +25,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Some test were moved to `@ParameterizedTest` for simple repetitive tests
 
-[Unreleased]: https://github.com/sierisimo/kyaml/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/sierisimo/kyaml/compare/v0.1.0...develop
 [0.1.0]: https://github.com/sierisimo/kyaml/compare/v0.0.0...v0.1.0
