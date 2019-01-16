@@ -1,4 +1,4 @@
-package net.sierisimo.validators
+package net.sierisimo.kyaml.validators
 
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.params.ParameterizedTest
@@ -57,7 +57,7 @@ internal class HasStartValidatorTest {
             |---
         """
     ])
-    fun `Other elements apart from comments are not allowed`(content: String) {
+    fun `Other elements apart from comments are not allowed`(content:   String) {
         assertFalse(validator.validate(content.trimMargin()))
     }
 

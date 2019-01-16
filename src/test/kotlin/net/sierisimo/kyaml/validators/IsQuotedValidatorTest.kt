@@ -1,4 +1,4 @@
-package net.sierisimo.validators
+package net.sierisimo.kyaml.validators
 
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.params.ParameterizedTest

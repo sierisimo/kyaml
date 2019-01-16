@@ -1,6 +1,6 @@
-package net.sierisimo.validators
+package net.sierisimo.kyaml.validators
 
-import net.sierisimo.LineChecker
+import net.sierisimo.kyaml.LineChecker
 
 class HasStartValidator : Validator, LineChecker {
     override fun validate(content: String): Boolean =

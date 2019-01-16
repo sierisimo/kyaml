@@ -10,12 +10,12 @@ buildscript {
     }
 
     dependencies {
-        classpath(kotlin("gradle-plugin", "1.3.10"))
+        classpath(kotlin("gradle-plugin", "1.3.11"))
     }
 }
 
 plugins {
-    kotlin("jvm") version "1.3.10"
+    kotlin("jvm") version "1.3.11"
     id("io.gitlab.arturbosch.detekt") version "1.0.0-RC11"
 }
 
@@ -36,8 +36,8 @@ dependencies {
 
     testImplementation("io.mockk:mockk:1.8.13")
 
-    testImplementation("org.jetbrains.kotlin:kotlin-test:1.3.10")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.3.10")
+    testImplementation("org.jetbrains.kotlin:kotlin-test:1.3.11")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.3.11")
 }
 
 tasks.withType<KotlinCompile> {
@@ -57,7 +57,7 @@ tasks.withType<Test> {
 }
 
 detekt {
-    toolVersion = "1.0.0-RC11"
+    toolVersion = "1.0.0-RC12"
     input = files("src/main/kotlin")
     filters = ".*/resources/.*,.*/build/.*"
     config = files("default-detekt-config.yml")

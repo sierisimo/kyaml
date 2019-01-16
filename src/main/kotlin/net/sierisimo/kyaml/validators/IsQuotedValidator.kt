@@ -1,4 +1,4 @@
-package net.sierisimo.validators
+package net.sierisimo.kyaml.validators
 
 class IsQuotedValidator : Validator {
     override fun validate(content: String): Boolean {

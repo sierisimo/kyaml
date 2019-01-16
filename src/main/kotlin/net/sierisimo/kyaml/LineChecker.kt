@@ -1,4 +1,4 @@
-package net.sierisimo
+package net.sierisimo.kyaml
 
 interface LineChecker {
     fun String.isComment() = startsWith("#")
