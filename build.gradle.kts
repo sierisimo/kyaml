@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 group = "net.sierisimo"
-version = "0.0.1"
+version = "0.1.0"
 
 buildscript {
     repositories {

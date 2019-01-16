@@ -28,31 +28,39 @@ internal class KYAMLTest {
         }
     }
 
-    @Test
-    fun `comments only YAML is NOT a valid YAML`() {
+    @ParameterizedTest
+    @ValueSource(strings = ["#",
+        """#
+        |#
+        |#
+        """])
+    fun `comments only YAML is NOT a valid YAML`(content: String) {
         assertFailsWith(KYAMLException::class) {
-            val content = "#"
-            KYAML.of(content)
-        }
-
-        assertFailsWith(KYAMLException::class) {
-            val content = """#
-                |#
-                |#
-            """.trimMargin()
-            KYAML.of(content)
+            KYAML.of(content.trimMargin())
         }
     }
 
     @Test
     fun `Key and Value should exist with small YAML, it can be an int`() {
-        val content = """---
+        var content = """---
             |foo: 1
         """.trimMargin()
-        val result = KYAML.of(content)
-        val output = result["foo"]?.toInt()
+        var result = KYAML.of(content)
+        var output = result["foo"]?.toInt()
 
         assertEquals(1, output)
+
+        content = """---
+            |bar: 100
+            |baz: 2000
+        """.trimMargin()
+        result = KYAML.of(content)
+
+        output = result["bar"]?.toInt()
+        assertEquals(100, output)
+
+        output = result["baz"]?.toInt()
+        assertEquals(2000, output)
     }
 
     @Test
@@ -61,17 +69,29 @@ internal class KYAMLTest {
             |foo: "1"
         """.trimMargin()
         var result = KYAML.of(content)
-        var output = result["foo"].toString()
 
+        var output = result["foo"].toString()
         assertEquals("1", output)
 
         content = """---
             |foo: '1'
         """.trimMargin()
         result = KYAML.of(content)
-        output = result["foo"].toString()
 
+        output = result["foo"].toString()
         assertEquals("1", output)
+
+        content = """---
+            |bar: 'yes, hi'
+            |baz: "foo"
+        """.trimMargin()
+        result = KYAML.of(content)
+
+        output = result["bar"].toString()
+        assertEquals("yes, hi", output)
+
+        output = result["baz"].toString()
+        assertEquals("foo", output)
     }
 
     @Test
