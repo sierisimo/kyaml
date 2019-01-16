@@ -1,0 +1,11 @@
+# This is an awesome YAML
+
+########
+# Sier #
+########
+---
+# First empty property
+foo: null
+bar: 'contnet
+can have
+multiline'
