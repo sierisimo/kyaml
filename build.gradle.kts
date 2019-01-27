@@ -10,13 +10,13 @@ buildscript {
     }
 
     dependencies {
-        classpath(kotlin("gradle-plugin", "1.3.11"))
+        classpath(kotlin("gradle-plugin", "1.3.20"))
     }
 }
 
 plugins {
-    kotlin("jvm") version "1.3.11"
-    id("io.gitlab.arturbosch.detekt") version "1.0.0-RC11"
+    kotlin("jvm") version "1.3.20"
+    id("io.gitlab.arturbosch.detekt") version "1.0.0-RC12"
 }
 
 repositories {
@@ -36,8 +36,8 @@ dependencies {
 
     testImplementation("io.mockk:mockk:1.8.13")
 
-    testImplementation("org.jetbrains.kotlin:kotlin-test:1.3.11")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.3.11")
+    testImplementation("org.jetbrains.kotlin:kotlin-test:1.3.20")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.3.20")
 }
 
 tasks.withType<KotlinCompile> {

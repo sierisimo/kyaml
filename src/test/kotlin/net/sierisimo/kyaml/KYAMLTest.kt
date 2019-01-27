@@ -3,43 +3,12 @@ package net.sierisimo.kyaml
 import net.sierisimo.kyaml.values.Empty
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.ValueSource
 import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 @DisplayName("Main set of tests")
 internal class KYAMLTest {
-    @Test
-    fun `empty YAML is NOT a valid YAML`() {
-        assertFailsWith(IllegalArgumentException::class) {
-            val content = ""
-            KYAML.of(content)
-        }
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = ["""foo""", """foo: |""", """? |""", """..."""])
-    fun `no explicit start is NOT a valid YAML`(content: String) {
-        assertFailsWith(KYAMLException::class) {
-            KYAML.of(content)
-        }
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = ["#",
-        """#
-        |#
-        |#
-        """])
-    fun `comments only YAML is NOT a valid YAML`(content: String) {
-        assertFailsWith(KYAMLException::class) {
-            KYAML.of(content.trimMargin())
-        }
-    }
-
     @Test
     fun `Key and Value should exist with small YAML, it can be an int`() {
         var content = """---
@@ -127,5 +96,27 @@ internal class KYAMLTest {
         val result = KYAML.of(content)
 
         assertTrue(result["foo"] is Empty)
+    }
+
+    @Test
+    fun `Comments between elements should not affect`() {
+        val content = """---
+            |foo
+            |bar: 1
+            |# A string
+            |baz: Sier
+            |# Even
+            |
+            |# Empty
+            |
+            |# Lines
+            |fooBar: true
+        """.trimMargin()
+        val result = KYAML.of(content)
+
+        assertTrue(result["foo"] is Empty)
+        assertEquals(1, result["bar"]?.toInt())
+        assertEquals("Sier", result["baz"].toString())
+        assertEquals(true, result["fooBar"]?.toBoolean())
     }
 }
